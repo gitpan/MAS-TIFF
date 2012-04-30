@@ -6,13 +6,6 @@
 use strict;
 use warnings;
 
-use FileHandle;
-
-use MAS::TIFF::IO;
-use MAS::TIFF::Rational;
-use MAS::TIFF::DataType;
-use MAS::TIFF::Field;
-use MAS::TIFF::IFD;
 use MAS::TIFF::File;
 
 my $path = 't/original.tif';
@@ -23,14 +16,20 @@ my $path = 't/original.tif';
 my $tif = MAS::TIFF::File->new($path);
 $tif->dump;
 
-for my $ifd ($tif->ifds) {
-  for my $y (0..70) {
-    for my $x (0..70) {
-      print $ifd->pixel_at($x, $y) ? '.' : '*';
-    }
-    print "\n";
-  }
-}
+#for my $ifd ($tif->ifds) {
+#  my $pixel_reader = $ifd->pixel_reader;
+#  
+#  for my $y (0..70) {
+#    for my $x (0..70) {
+#      print &$pixel_reader($x, $y) ? '.' : '*';
+#    }
+#    print "\n";
+#  }
+#
+#  for my $y (0..$ifd->image_length - 1) {
+#    my $temp = &$pixel_reader(0, $y);
+#  }
+#}
 
 $tif->close;
 

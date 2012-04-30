@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               MAS-TIFF
-version:            0.1
+version:            0.4
 abstract:           ~
 author:
     - Gregor N. Purdy, Sr. <gnp@acm.org>

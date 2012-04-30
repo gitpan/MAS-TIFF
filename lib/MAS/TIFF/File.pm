@@ -7,7 +7,12 @@ use warnings;
 
 package MAS::TIFF::File;
 
-our $VERSION = '0.1';
+use Filehandle;
+use MAS::TIFF::IO;
+use MAS::TIFF::IFD;
+use MAS::TIFF::DataType;
+
+our $VERSION = '0.4';
 
 sub new {
   my $class = shift;
@@ -63,8 +68,8 @@ sub dump {
     
     foreach my $field ($ifd->fields) {
       if ($field->size > 4) {
-        printf("    FIELD: TAG %d (%s), TYPE %s, COUNT %d, SIZE %d, TEMPLATE %s, OFFSET %d\n", $field->id, $field->name,
-          $field->type->name, $field->count, $field->size, $field->template, $field->offset);
+        printf("    FIELD: TAG %d (%s), TYPE %s, COUNT %d, SIZE %d, TEMPLATE %s, RAW 0x%s, OFFSET %d\n", $field->id, $field->name,
+          $field->type->name, $field->count, $field->size, $field->template,  unpack('H*', $field->raw), $field->offset);
       }
       else {
         printf("    FIELD: TAG %d (%s), TYPE %s, COUNT %d, SIZE %d, TEMPLATE %s, RAW 0x%s, VALUES (%s)\n", $field->id, $field->name,
@@ -86,17 +91,14 @@ sub dump {
     printf("    Is Page: %d\n", $ifd->is_page);
     printf("    Is Mask: %d\n", $ifd->is_mask);
     printf("    Resolution: %s x %s PIXELS / %s\n", $ifd->x_resolution->to_string, $ifd->y_resolution->to_string, $ifd->resolution_unit);
-    printf("    Software: '%s'\n", $ifd->software);
-    printf("    Datetime: '%s'\n", $ifd->datetime);
+    printf("    Software: '%s'\n", $ifd->software) if defined $ifd->software;
+    printf("    Datetime: '%s'\n", $ifd->datetime) if defined $ifd->datetime;
     
-    my $index = 0;
-    
-    my $bytes = $ifd->strip($index);
-    
-    my $dump = unpack('H*', $bytes);
-    
-    print "\nStrip 0:\n";
-    print $dump, "\n\n";
+#    my $index = 0;
+#    my $bytes = $ifd->strip($index);   
+#    my $dump = unpack('H*', $bytes);
+#   print "\nStrip 0:\n";
+#   print $dump, "\n\n";
   }
 }
 
